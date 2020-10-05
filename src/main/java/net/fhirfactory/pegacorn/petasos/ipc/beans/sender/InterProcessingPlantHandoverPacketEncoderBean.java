@@ -35,7 +35,7 @@ public class InterProcessingPlantHandoverPacketEncoderBean {
     @Inject
     private IPCPacketFramingConstants framingConstants;
 
-    public String handoverPacketDecode(InterProcessingPlantHandoverPacket incomingMessage) throws JsonProcessingException {
+    public String handoverPacketEncode(InterProcessingPlantHandoverPacket incomingMessage) throws JsonProcessingException {
         ObjectMapper jsonMapper = new ObjectMapper();
         String output = jsonMapper.writeValueAsString(incomingMessage);
         output = output + framingConstants.getIpcPacketFrameEnd();

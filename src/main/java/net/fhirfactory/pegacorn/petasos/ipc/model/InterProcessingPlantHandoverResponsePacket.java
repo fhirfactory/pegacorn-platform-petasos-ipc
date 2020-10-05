@@ -22,15 +22,15 @@
 package net.fhirfactory.pegacorn.petasos.ipc.model;
 
 import net.fhirfactory.pegacorn.petasos.model.pathway.ActivityID;
-import net.fhirfactory.pegacorn.petasos.model.wup.WUPActivityStatusEnum;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class InterProcessingPlantHandoverResponsePacket {
     private ActivityID activityID;
     private String messageIdentifier;
     private Integer messageSize;
-    private LocalDateTime sendDate;
+    private Date sendDate;
     private InterProcessingPlantHandoverPacketStatusEnum status;
 
     public InterProcessingPlantHandoverPacketStatusEnum getStatus() {
@@ -65,11 +65,11 @@ public class InterProcessingPlantHandoverResponsePacket {
         this.messageSize = messageSize;
     }
 
-    public LocalDateTime getSendDate() {
+    public Date getSendDate() {
         return sendDate;
     }
 
-    public void setSendDate(LocalDateTime sendDate) {
+    public void setSendDate(Date sendDate) {
         this.sendDate = sendDate;
     }
 }

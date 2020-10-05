@@ -53,24 +53,27 @@ public class InterProcessingPlantHandoverPacketGenerationBean {
     @Inject
     ProcessingPlantServicesInterface processingPlantServices;
 
-    public InterProcessingPlantHandoverPacket generateInterProcessingPlantHandoverPacket(UoW theUoW, Exchange camelExchange, String wupInstanceKey){
-        LOG.debug(".generateInterProcessingPlantHandoverPacket(): Entry, theUoW (UoW) --> {}, wupInstanceKey (String) --> {}", theUoW, wupInstanceKey);
-        LOG.trace(".generateInterProcessingPlantHandoverPacket(): Attempting to retrieve NodeElement");
+    public InterProcessingPlantHandoverPacket constructInterProcessingPlantHandoverPacket(UoW theUoW, Exchange camelExchange, String wupInstanceKey){
+        LOG.debug(".constructInterProcessingPlantHandoverPacket(): Entry, theUoW (UoW) --> {}, wupInstanceKey (String) --> {}", theUoW, wupInstanceKey);
+        LOG.trace(".constructInterProcessingPlantHandoverPacket(): Attempting to retrieve NodeElement");
         NodeElement node = topologyProxy.getNodeByKey(wupInstanceKey);
-        LOG.trace(".generateInterProcessingPlantHandoverPacket(): Node Element retrieved --> {}", node);
-        LOG.trace(".generateInterProcessingPlantHandoverPacket(): Extracting Job Card and Status Element from Exchange");
+        LOG.trace(".constructInterProcessingPlantHandoverPacket(): Node Element retrieved --> {}", node);
+        LOG.trace(".constructInterProcessingPlantHandoverPacket(): Extracting Job Card and Status Element from Exchange");
         String jobcardPropertyKey = exchangePropertyNames.getExchangeJobCardPropertyName(wupInstanceKey); // this value should match the one in WUPIngresConduit.java/WUPEgressConduit.java
         String parcelStatusPropertyKey = exchangePropertyNames.getExchangeStatusElementPropertyName(wupInstanceKey); // this value should match the one in WUPIngresConduit.java/WUPEgressConduit.java
         WUPJobCard jobCard = camelExchange.getProperty(jobcardPropertyKey, WUPJobCard.class); // <-- Note the "WUPJobCard" property name, make sure this is aligned with the code in the WUPEgressConduit.java file
         ParcelStatusElement statusElement = camelExchange.getProperty(parcelStatusPropertyKey, ParcelStatusElement.class); // <-- Note the "ParcelStatusElement" property name, make sure this is aligned with the code in the WUPEgressConduit.java file
-        LOG.trace(".generateInterProcessingPlantHandoverPacket(): Creating the Response message");
+        LOG.trace(".constructInterProcessingPlantHandoverPacket(): Creating the Response message");
         InterProcessingPlantHandoverPacket forwardingPacket = new InterProcessingPlantHandoverPacket();
         forwardingPacket.setActivityID(jobCard.getActivityID());
         String processingPlantName = processingPlantServices.getProcessingPlantNodeElement().extractNodeKey();
         forwardingPacket.setMessageIdentifier(processingPlantName + "-" + Date.from(Instant.now()).toString());
-        forwardingPacket.setSendDate(LocalDateTime.now());
+        forwardingPacket.setSendDate(Date.from(Instant.now()));
         forwardingPacket.setPayloadPacket(theUoW);
-        LOG.debug(".generateInterProcessingPlantHandoverPacket(): Exit, forwardingPacket (InterProcessingPlantHandoverPacket) --> {}", forwardingPacket);
+        LOG.trace(".constructInterProcessingPlantHandoverPacket(): not push the UoW into Exchange as a property for extraction after IPC activity");
+        String uowPropertyKey = exchangePropertyNames.getExchangeUoWPropertyName(wupInstanceKey);
+        camelExchange.setProperty(uowPropertyKey, theUoW);
+        LOG.debug(".constructInterProcessingPlantHandoverPacket(): Exit, forwardingPacket (InterProcessingPlantHandoverPacket) --> {}", forwardingPacket);
         return(forwardingPacket);
     }
 }

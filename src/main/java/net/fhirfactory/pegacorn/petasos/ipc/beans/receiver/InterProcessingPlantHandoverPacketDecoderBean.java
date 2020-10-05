@@ -30,9 +30,14 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class InterProcessingPlantHandoverPacketDecoderBean {
 
-    public InterProcessingPlantHandoverPacket handoverPacketDecode(String incomingMessage) throws JsonProcessingException {
-        ObjectMapper jsonMapper = new ObjectMapper();
-        InterProcessingPlantHandoverPacket output = jsonMapper.readValue(incomingMessage, InterProcessingPlantHandoverPacket.class);
-        return(output);
+    public InterProcessingPlantHandoverPacket handoverPacketDecode(String incomingMessage){
+        InterProcessingPlantHandoverPacket handoverPacket;
+        try{
+            ObjectMapper jsonMapper = new ObjectMapper();
+            handoverPacket = jsonMapper.readValue(incomingMessage, InterProcessingPlantHandoverPacket.class);
+        } catch(JsonProcessingException badMessageFormatException){
+            handoverPacket = null;
+        }
+        return(handoverPacket);
     }
 }

@@ -25,7 +25,7 @@ import net.fhirfactory.pegacorn.petasos.ipc.model.InterProcessingPlantHandoverPa
 import net.fhirfactory.pegacorn.petasos.ipc.model.InterProcessingPlantHandoverResponsePacket;
 import net.fhirfactory.pegacorn.petasos.model.uow.UoW;
 
-public class SenderInterBeanHandoverPostSendPacket {
+public class InterProcessingPlantHandoverContextualResponse {
     UoW theUoW;
     InterProcessingPlantHandoverResponsePacket responsePacket;
 

@@ -24,7 +24,7 @@ package net.fhirfactory.pegacorn.petasos.ipc.model;
 import net.fhirfactory.pegacorn.petasos.model.pathway.ActivityID;
 import net.fhirfactory.pegacorn.petasos.model.uow.UoW;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class InterProcessingPlantHandoverPacket {
     private UoW payloadPacket;
@@ -32,7 +32,7 @@ public class InterProcessingPlantHandoverPacket {
     private ActivityID activityID;
     private String messageIdentifier;
     private Integer messageSize;
-    private LocalDateTime sendDate;
+    private Date sendDate;
 
     public ActivityID getActivityID() {
         return activityID;
@@ -58,11 +58,11 @@ public class InterProcessingPlantHandoverPacket {
         this.messageIdentifier = messageIdentifier;
     }
 
-    public LocalDateTime getSendDate() {
+    public Date getSendDate() {
         return (sendDate);
     }
 
-    public void setSendDate(LocalDateTime sendDate) {
+    public void setSendDate(Date sendDate) {
         this.sendDate = sendDate;
     }
 

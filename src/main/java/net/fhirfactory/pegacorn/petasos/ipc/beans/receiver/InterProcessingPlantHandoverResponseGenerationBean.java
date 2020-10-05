@@ -39,6 +39,7 @@ import javax.inject.Inject;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import net.fhirfactory.pegacorn.petasos.ipc.model.InterProcessingPlantHandoverPacket;
 
 @ApplicationScoped
 public class InterProcessingPlantHandoverResponseGenerationBean {
@@ -53,8 +54,8 @@ public class InterProcessingPlantHandoverResponseGenerationBean {
     @Inject
     ProcessingPlantServicesInterface processingPlantServices;
 
-    public InterProcessingPlantHandoverResponsePacket generateInterProcessingPlantHandoverResponse(UoW theUoW, Exchange camelExchange, String wupInstanceKey){
-        LOG.debug(".generateInterProcessingPlantHandoverResponse(): Entry, theUoW (UoW) --> {}, wupInstanceKey (String) --> {}", theUoW, wupInstanceKey);
+    public InterProcessingPlantHandoverResponsePacket generateInterProcessingPlantHandoverResponse(InterProcessingPlantHandoverPacket incomingPacket, Exchange camelExchange, String wupInstanceKey){
+        LOG.debug(".generateInterProcessingPlantHandoverResponse(): Entry, incomingPacket (InterProcessingPlantHandoverPacket) --> {}, wupInstanceKey (String) --> {}", incomingPacket, wupInstanceKey);
         LOG.trace(".generateInterProcessingPlantHandoverResponse(): reconstituted token, now attempting to retrieve NodeElement");
         NodeElement node = topologyProxy.getNodeByKey(wupInstanceKey);
         LOG.trace(".generateInterProcessingPlantHandoverResponse(): Node Element retrieved --> {}", node);
@@ -68,7 +69,7 @@ public class InterProcessingPlantHandoverResponseGenerationBean {
         response.setActivityID(jobCard.getActivityID());
         String processingPlantName = processingPlantServices.getProcessingPlantNodeElement().extractNodeKey();
         response.setMessageIdentifier(processingPlantName + "-" + Date.from(Instant.now()).toString());
-        response.setSendDate(LocalDateTime.now());
+        response.setSendDate(Date.from(Instant.now()));
         LOG.trace(".generateInterProcessingPlantHandoverResponse(): We are at this point, so it is all good - so assign appropriate status");
         response.setStatus(InterProcessingPlantHandoverPacketStatusEnum.PACKET_RECEIVED_AND_DECODED);
         LOG.debug(".generateInterProcessingPlantHandoverResponse(): Exit, response (InterProcessingPlantHandoverResponsePacket) --> {}", response);

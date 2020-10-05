@@ -30,7 +30,7 @@ import net.fhirfactory.pegacorn.petasos.core.moa.brokers.PetasosMOAServicesBroke
 import net.fhirfactory.pegacorn.petasos.core.moa.pathway.naming.PetasosPathwayExchangePropertyNames;
 import net.fhirfactory.pegacorn.petasos.ipc.model.InterProcessingPlantHandoverPacket;
 import net.fhirfactory.pegacorn.petasos.ipc.model.InterProcessingPlantHandoverResponsePacket;
-import net.fhirfactory.pegacorn.petasos.ipc.model.SenderInterBeanHandoverPostSendPacket;
+import net.fhirfactory.pegacorn.petasos.ipc.model.InterProcessingPlantHandoverContextualResponse;
 import net.fhirfactory.pegacorn.petasos.model.pathway.ActivityID;
 import net.fhirfactory.pegacorn.petasos.model.resilience.activitymatrix.moa.ParcelStatusElement;
 import net.fhirfactory.pegacorn.petasos.model.topics.TopicToken;
@@ -66,8 +66,8 @@ public class InterProcessingPlantHandoverFinisherBean {
     @Inject
     PetasosPathwayExchangePropertyNames exchangePropertyNames;
 
-    public UoW ipcSenderNotifyActivityFinished(SenderInterBeanHandoverPostSendPacket handoverPacket, Exchange camelExchange, String wupInstanceKey) throws JsonProcessingException {
-        LOG.debug(".ipcSenderNotifyActivityFinished(): Entry, handoverPacket (SenderInterBeanHandoverPostSendPacket) --> {}, wupInstanceKey (String) --> {}", handoverPacket, wupInstanceKey);
+    public UoW ipcSenderNotifyActivityFinished(InterProcessingPlantHandoverContextualResponse handoverPacket, Exchange camelExchange, String wupInstanceKey) throws JsonProcessingException {
+        LOG.debug(".ipcSenderNotifyActivityFinished(): Entry, handoverPacket (InterProcessingPlantHandoverContextualResponse) --> {}, wupInstanceKey (String) --> {}", handoverPacket, wupInstanceKey);
         LOG.trace(".ipcSenderNotifyActivityFinished(): Get Job Card and Status Element from Exchange for extraction by the WUP Egress Conduit");
         String jobcardPropertyKey = exchangePropertyNames.getExchangeJobCardPropertyName(wupInstanceKey); // this value should match the one in WUPIngresConduit.java/WUPEgressConduit.java
         String parcelStatusPropertyKey = exchangePropertyNames.getExchangeStatusElementPropertyName(wupInstanceKey); // this value should match the one in WUPIngresConduit.java/WUPEgressConduit.java
@@ -75,16 +75,20 @@ public class InterProcessingPlantHandoverFinisherBean {
         ParcelStatusElement statusElement = camelExchange.getProperty(parcelStatusPropertyKey, ParcelStatusElement.class); // <-- Note the "ParcelStatusElement" property name, make sure this is aligned with the code in the WUPEgressConduit.java file
         LOG.trace(".ipcSenderNotifyActivityFinished(): Extract the UoW");
         UoW theUoW = handoverPacket.getTheUoW();
+        LOG.trace(".ipcSenderNotifyActivityFinished(): Extracted UoW --> {}", theUoW);
         InterProcessingPlantHandoverResponsePacket responsePacket = handoverPacket.getResponsePacket();
         switch(responsePacket.getStatus()){
             case PACKET_RECEIVED_AND_DECODED:
+                LOG.trace(".ipcSenderNotifyActivityFinished(): PACKET_RECEIVED_AND_DECODED");
                 theUoW.setProcessingOutcome(UoWProcessingOutcomeEnum.UOW_OUTCOME_SUCCESS);
                 break;
             case PACKET_RECEIVED_BUT_FAILED_DECODING:
+                LOG.trace(".ipcSenderNotifyActivityFinished(): PACKET_RECEIVED_BUT_FAILED_DECODING");
                 theUoW.setProcessingOutcome(UoWProcessingOutcomeEnum.UOW_OUTCOME_FAILED);
                 theUoW.setFailureDescription("Message encoding/decoding failure!");
                 break;
             case PACKET_RECEIVE_TIMED_OUT:
+                LOG.trace(".ipcSenderNotifyActivityFinished(): PACKET_RECEIVE_TIMED_OUT");
             default:
                 theUoW.setProcessingOutcome(UoWProcessingOutcomeEnum.UOW_OUTCOME_FAILED);
                 theUoW.setFailureDescription("Message delivery failure!");
@@ -103,7 +107,8 @@ public class InterProcessingPlantHandoverFinisherBean {
         egressPayloadTopic.setVersion("1.0.0");
         egressPayload.setPayloadTopicID(egressPayloadTopic);
         theUoW.getEgressContent().addPayloadElement(egressPayload);
-        LOG.debug(".ipcSenderNotifyActivityFinished(): exit, theUoW (UoW) -->", theUoW);
+        servicesBroker.notifyFinishOfWorkUnitActivity(activityJobCard, theUoW);
+        LOG.debug(".ipcSenderNotifyActivityFinished(): exit, theUoW (UoW) --> {}", theUoW);
         return(theUoW);
     }
 }

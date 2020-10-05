@@ -29,9 +29,13 @@ import net.fhirfactory.pegacorn.petasos.ipc.model.InterProcessingPlantHandoverRe
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class InterProcessingPlantHandoverResponseEncoderBean {
+    private static final Logger LOG = LoggerFactory.getLogger(InterProcessingPlantHandoverResponseEncoderBean.class);
+    
 
     @Inject
     private IPCPacketFramingConstants framingConstants;
@@ -40,6 +44,7 @@ public class InterProcessingPlantHandoverResponseEncoderBean {
         ObjectMapper jsonMapper = new ObjectMapper();
         String outputPayload = jsonMapper.writeValueAsString(responsePacket);
         outputPayload = outputPayload + framingConstants.getIpcPacketFrameEnd();
+        LOG.debug(".responseEncoder(): Response Message --> {}", outputPayload);
         return (outputPayload);
     }
 }

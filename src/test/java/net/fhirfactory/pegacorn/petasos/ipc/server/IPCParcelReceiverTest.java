@@ -46,7 +46,9 @@ public class IPCParcelReceiverTest {
         }
         testWAR = ShrinkWrap.create(WebArchive.class, "pegacorn-petasos-ipc-test.war")
                 .addAsLibraries(fileSet)
-                .addPackages(true, "net.fhirfactory.pegacorn.petasos.ipc")
+                .addPackages(true, "net.fhirfactory.pegacorn.petasos.ipc.server")
+                .addPackages(true, "net.fhirfactory.pegacorn.petasos.ipc.model")
+                .addPackages(true, "net.fhirfactory.pegacorn.petasos.ipc.codecs")
                 .addAsManifestResource("META-INF/beans.xml", "WEB-INF/beans.xml");
         if (LOG.isDebugEnabled()) {
             Map<ArchivePath, Node> content = testWAR.getContent();

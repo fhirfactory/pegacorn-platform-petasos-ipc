@@ -24,11 +24,12 @@ package net.fhirfactory.pegacorn.petasos.ipc.model;
 import net.fhirfactory.pegacorn.common.model.FDNToken;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class InterProcessingPlantWatchDogHeartbeatResponse {
     private FDNToken processingPlantIdentifier;
     private String heartbeatIdentifier;
-    private LocalDateTime receivedDate;
+    private Date receivedDate;
 
     public FDNToken getProcessingPlantIdentifier() {
         return processingPlantIdentifier;
@@ -46,11 +47,11 @@ public class InterProcessingPlantWatchDogHeartbeatResponse {
         this.heartbeatIdentifier = heartbeatIdentifier;
     }
 
-    public LocalDateTime getReceivedDate() {
+    public Date getReceivedDate() {
         return receivedDate;
     }
 
-    public void setReceivedDate(LocalDateTime receivedDate) {
+    public void setReceivedDate(Date receivedDate) {
         this.receivedDate = receivedDate;
     }
 }

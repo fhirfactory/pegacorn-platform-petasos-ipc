@@ -56,7 +56,7 @@ public class InterProcessingPlantHandoverRegistrationBean {
     @Inject
     PetasosPathwayExchangePropertyNames exchangePropertyNames;
 
-    public UoW ipcReceiverActivityStart(InterProcessingPlantHandoverPacket thePacket, Exchange camelExchange, String wupInstanceKey){
+    public InterProcessingPlantHandoverPacket ipcReceiverActivityStart(InterProcessingPlantHandoverPacket thePacket, Exchange camelExchange, String wupInstanceKey){
         LOG.debug(".ipcReceiverActivityStart(): Entry, thePacket --> {}, wupInstanceKey --> {}", thePacket, wupInstanceKey);
         LOG.trace(".ipcReceiverActivityStart(): reconstituted token, now attempting to retrieve NodeElement");
         NodeElement node = topologyProxy.getNodeByKey(wupInstanceKey);
@@ -84,6 +84,6 @@ public class InterProcessingPlantHandoverRegistrationBean {
         camelExchange.setProperty(jobcardPropertyKey, activityJobCard); // <-- Note the "WUPJobCard" property name, make sure this is aligned with the code in the WUPEgressConduit.java file
         camelExchange.setProperty(parcelStatusPropertyKey, statusElement); // <-- Note the "ParcelStatusElement" property name, make sure this is aligned with the code in the WUPEgressConduit.java file
         LOG.debug(".ipcReceiverActivityStart(): exit, my work is done!");
-        return(theUoW);
+        return(thePacket);
     }
 }
