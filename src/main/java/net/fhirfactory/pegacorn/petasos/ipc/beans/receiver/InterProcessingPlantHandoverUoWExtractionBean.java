@@ -51,7 +51,7 @@ public class InterProcessingPlantHandoverUoWExtractionBean {
         outputPayload.setPayload(theUoW.getIngresContent().getPayload());
         TopicToken topicId = theUoW.getPayloadTopicID();
         topicId.removeDescriminator();
-        topicId.addDescriminator("Destination", "Ladon.StateSpace.Normaliser");
+        topicId.addDescriminator("Source", "Edge.Receive");
         outputPayload.setPayloadTopicID(topicId);
         theUoW.getEgressContent().addPayloadElement(outputPayload);
         theUoW.setProcessingOutcome(UoWProcessingOutcomeEnum.UOW_OUTCOME_SUCCESS);
