@@ -107,7 +107,15 @@ public class InterProcessingPlantHandoverFinisherBean {
         egressPayloadTopic.setVersion("1.0.0");
         egressPayload.setPayloadTopicID(egressPayloadTopic);
         theUoW.getEgressContent().addPayloadElement(egressPayload);
-        servicesBroker.notifyFinishOfWorkUnitActivity(activityJobCard, theUoW);
+        switch(theUoW.getProcessingOutcome()){
+            case UOW_OUTCOME_SUCCESS:
+                servicesBroker.notifyFinishOfWorkUnitActivity(activityJobCard, theUoW);
+                break;
+            case UOW_OUTCOME_NOTSTARTED:
+            case UOW_OUTCOME_INCOMPLETE:
+            case UOW_OUTCOME_FAILED:
+                servicesBroker.notifyFailureOfWorkUnitActivity(activityJobCard, theUoW);
+        }
         LOG.debug(".ipcSenderNotifyActivityFinished(): exit, theUoW (UoW) --> {}", theUoW);
         return(theUoW);
     }
