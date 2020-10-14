@@ -21,13 +21,10 @@
  */
 package net.fhirfactory.pegacorn.petasos.ipc.codecs;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import org.apache.camel.component.netty.DefaultChannelHandlerFactory;
+
 import io.netty.channel.ChannelHandler;
 import io.netty.handler.codec.string.StringDecoder;
-import io.netty.util.CharsetUtil;
-import org.apache.camel.component.netty.DefaultChannelHandlerFactory;
-import org.apache.camel.component.netty.codec.DelimiterBasedFrameDecoder;
 
 
 public class IPCStringBasedDecoderFactory extends DefaultChannelHandlerFactory {
