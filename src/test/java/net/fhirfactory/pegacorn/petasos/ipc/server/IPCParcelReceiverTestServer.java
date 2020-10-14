@@ -1,16 +1,17 @@
 package net.fhirfactory.pegacorn.petasos.ipc.server;
 
-import org.apache.camel.CamelContext;
-import org.apache.camel.LoggingLevel;
-import org.apache.camel.builder.RouteBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.apache.camel.CamelContext;
+import org.apache.camel.LoggingLevel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.fhirfactory.pegacorn.camel.BaseRouteBuilder;
+
 @ApplicationScoped
-public class IPCParcelReceiverTestServer extends RouteBuilder {
+public class IPCParcelReceiverTestServer extends BaseRouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(IPCParcelReceiverTestServer.class);
 
     @Inject
@@ -31,7 +32,7 @@ public class IPCParcelReceiverTestServer extends RouteBuilder {
     public void configure() throws Exception {
         startServer();
 
-        from("timer://myTimer?period=10000")
+        fromWithStandardExceptionHandling("timer://myTimer?period=10000")
                 .log(LoggingLevel.INFO, "IPCParcelReceiverTestServer is alive!")
                 .end();
     }

@@ -22,16 +22,21 @@
 
 package net.fhirfactory.pegacorn.petasos.ipc.server;
 
-import net.fhirfactory.pegacorn.petasos.ipc.codecs.IPCPacketDecoderInitializerFactory;
-import net.fhirfactory.pegacorn.petasos.ipc.model.IPCPacketFramingConstants;
-import org.apache.camel.*;
-import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.apache.camel.LoggingLevel;
+import org.apache.camel.Processor;
 import org.apache.camel.component.netty.ServerInitializerFactory;
 import org.apache.camel.spi.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class IPCParcelReceiver extends RouteBuilder {
+import net.fhirfactory.pegacorn.camel.BaseRouteBuilder;
+import net.fhirfactory.pegacorn.petasos.ipc.codecs.IPCPacketDecoderInitializerFactory;
+import net.fhirfactory.pegacorn.petasos.ipc.model.IPCPacketFramingConstants;
+
+public class IPCParcelReceiver extends BaseRouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(IPCParcelReceiver.class);
     private String serverHostName;
     private Integer serverHostPort;
@@ -54,7 +59,7 @@ public class IPCParcelReceiver extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from(ingresFeed())
+        fromWithStandardExceptionHandling(ingresFeed())
                 .routeId("TestRoute")
                 .log(LoggingLevel.INFO, "content --> ${body}")
                 .transform(simple("${bodyAs(String)}"))
@@ -68,7 +73,7 @@ public class IPCParcelReceiver extends RouteBuilder {
                              }
                          }
                 );
-        from("direct:testingSystem")
+        fromWithStandardExceptionHandling("direct:testingSystem")
                 .log(LoggingLevel.INFO, "Secondary Feed: content --> ${body}");
     }
 
