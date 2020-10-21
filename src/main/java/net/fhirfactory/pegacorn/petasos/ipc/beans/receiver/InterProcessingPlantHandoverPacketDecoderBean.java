@@ -24,20 +24,26 @@ package net.fhirfactory.pegacorn.petasos.ipc.beans.receiver;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.fhirfactory.pegacorn.petasos.ipc.model.InterProcessingPlantHandoverPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class InterProcessingPlantHandoverPacketDecoderBean {
+    private static final Logger LOG = LoggerFactory.getLogger(InterProcessingPlantHandoverPacketDecoderBean.class);
 
     public InterProcessingPlantHandoverPacket handoverPacketDecode(String incomingMessage){
+        LOG.debug(".handoverPacketDecode(): Entry, incomingMessage --> {}", incomingMessage);
         InterProcessingPlantHandoverPacket handoverPacket;
         try{
             ObjectMapper jsonMapper = new ObjectMapper();
             handoverPacket = jsonMapper.readValue(incomingMessage, InterProcessingPlantHandoverPacket.class);
         } catch(JsonProcessingException badMessageFormatException){
+            LOG.error(".handoverPacketDecode(): Failure to convert content... ", badMessageFormatException);
             handoverPacket = null;
         }
+        LOG.debug(".handoverPacketDecode(): Exit");
         return(handoverPacket);
     }
 }
