@@ -44,14 +44,17 @@ public class InterProcessingPlantHandoverUoWExtractionBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(InterProcessingPlantHandoverResponseGenerationBean.class);
 
-    public UoW extractUoW(InterProcessingPlantHandoverPacket thePacket, Exchange camelExchange) {
+    public UoW extractUoW(InterProcessingPlantHandoverPacket thePacket, Exchange camelExchange, String sourceSubsystem) {
         LOG.debug(".extractUoW(): Entry, thePacket --> {}", thePacket);
         UoW theUoW = thePacket.getPayloadPacket();
         UoWPayload outputPayload = new UoWPayload();
         outputPayload.setPayload(theUoW.getIngresContent().getPayload());
         TopicToken topicId = theUoW.getPayloadTopicID();
+        LOG.trace(".extractUoW(): Original Topic Id --> {}", topicId);
         topicId.removeDescriminator();
-        topicId.addDescriminator("Source", "Edge.Receive");
+        LOG.trace(".extractUoW(): Topic Id with Descriminator Removed --> {}", topicId);
+        topicId.addDescriminator("Source", sourceSubsystem);
+        LOG.trace(".extractUoW(): Topic Id with new Descriminator --> {}", topicId);
         outputPayload.setPayloadTopicID(topicId);
         theUoW.getEgressContent().addPayloadElement(outputPayload);
         theUoW.setProcessingOutcome(UoWProcessingOutcomeEnum.UOW_OUTCOME_SUCCESS);
