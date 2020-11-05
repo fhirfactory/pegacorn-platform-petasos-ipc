@@ -30,15 +30,15 @@ public class IPCPacketFramingConstants {
     private static final String IPC_PACKET_FRAME_END = "<|><ETX><|>";
     private static final String IPC_PACKET_FRAME_START = "<|><STX><|>";
 
-    public Integer getIpcPacketMaximumFrameSize() {
+    public static Integer getIpcPacketMaximumFrameSize() {
         return GenericMOAWUPTemplate.IPC_PACKET_MAXIMUM_FRAME_SIZE;
     }
 
-    public String getIpcPacketFrameEnd() {
+    public static String getIpcPacketFrameEnd() {
         return IPC_PACKET_FRAME_END;
     }
 
-    public String getIpcPacketFrameStart() {
+    public static String getIpcPacketFrameStart() {
         return IPC_PACKET_FRAME_START;
     }
 }
