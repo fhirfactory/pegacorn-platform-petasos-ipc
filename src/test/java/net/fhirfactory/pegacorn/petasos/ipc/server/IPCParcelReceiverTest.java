@@ -30,6 +30,8 @@ import java.util.Set;
 public class IPCParcelReceiverTest {
     private static final Logger LOG = LoggerFactory.getLogger(IPCParcelReceiverTest.class);
 
+    IPCPacketFramingConstants framingConstants = new IPCPacketFramingConstants();
+    
     @Deployment(testable=false)
     public static WebArchive createDeployment() {
         WebArchive testWAR;
@@ -74,11 +76,11 @@ public class IPCParcelReceiverTest {
             OutputStream outputStream = socket.getOutputStream();
             InputStreamReader streamReader = new InputStreamReader(socket.getInputStream());
             BufferedReader incomingStream = new BufferedReader(streamReader);
-            String testMessage =  "Howdie Doodie" + IPCPacketFramingConstants.getIpcPacketFrameEnd();
+            String testMessage =  "Howdie Doodie" + framingConstants.getIpcPacketFrameEnd();
             outputStream.write(testMessage.getBytes());
             String incomingString = incomingStream.readLine();
             LOG.info(".testSimpleRoute(): Feedback1 --> {}", incomingString);
-            String testMessage2 = this.apInvoicesValidString + IPCPacketFramingConstants.getIpcPacketFrameEnd();
+            String testMessage2 = this.apInvoicesValidString + framingConstants.getIpcPacketFrameEnd();
             outputStream.write(testMessage2.getBytes());
             String incomingString2 = readResponse(streamReader);
             LOG.info(".testSimpleRoute(): Feedback2 --> {}", incomingString2);

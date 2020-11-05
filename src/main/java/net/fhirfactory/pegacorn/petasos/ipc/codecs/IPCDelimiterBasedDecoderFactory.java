@@ -28,11 +28,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.util.CharsetUtil;
-
+import net.fhirfactory.pegacorn.petasos.core.moa.wup.GenericMOAWUPTemplate;
 
 public class IPCDelimiterBasedDecoderFactory extends DefaultChannelHandlerFactory {
     private static final String IPC_PACKET_FRAME_END = "<|><ETX><|>";
-    private static final Integer IPC_PACKET_MAXIMUM_FRAME_SIZE = 26214400;
 
     @Override
     public ChannelHandler newChannelHandler() {
@@ -40,7 +39,7 @@ public class IPCDelimiterBasedDecoderFactory extends DefaultChannelHandlerFactor
         ByteBuf[] delimiterSet = new ByteBuf[1];
         delimiterSet[0] = ipcFrameEnd;
         DelimiterBasedFrameDecoder ipcFrameBasedDecoder = new DelimiterBasedFrameDecoder(
-                IPC_PACKET_MAXIMUM_FRAME_SIZE, true, delimiterSet);
+                GenericMOAWUPTemplate.IPC_PACKET_MAXIMUM_FRAME_SIZE, true, delimiterSet);
         return(ipcFrameBasedDecoder);
     }
 

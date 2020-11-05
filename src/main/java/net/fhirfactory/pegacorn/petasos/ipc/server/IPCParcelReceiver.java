@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.fhirfactory.pegacorn.camel.BaseRouteBuilder;
+import net.fhirfactory.pegacorn.petasos.core.moa.wup.GenericMOAWUPTemplate;
 import net.fhirfactory.pegacorn.petasos.ipc.codecs.IPCPacketDecoderInitializerFactory;
 import net.fhirfactory.pegacorn.petasos.ipc.model.IPCPacketFramingConstants;
 
@@ -83,7 +84,7 @@ public class IPCParcelReceiver extends BaseRouteBuilder {
                 + NETTY_TRANSPORT_TYPE + ":"
                 + "//" + getServerHostName() + ":"
                 + getServerHostPort().toString()
-                + "?serverInitializerFactory=#ipcReceiverFactory&receiveBufferSize=26214400"; // 25mb.  //TODO Mark will centralise buffer size management
+                + "?serverInitializerFactory=#ipcReceiverFactory&receiveBufferSize=" + GenericMOAWUPTemplate.IPC_PACKET_MAXIMUM_FRAME_SIZE;
         return (nettyFromString);
     }
 
