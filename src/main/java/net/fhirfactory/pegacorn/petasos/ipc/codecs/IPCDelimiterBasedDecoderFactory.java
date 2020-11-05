@@ -21,17 +21,18 @@
  */
 package net.fhirfactory.pegacorn.petasos.ipc.codecs;
 
+import org.apache.camel.component.netty.DefaultChannelHandlerFactory;
+import org.apache.camel.component.netty.codec.DelimiterBasedFrameDecoder;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.util.CharsetUtil;
-import org.apache.camel.component.netty.DefaultChannelHandlerFactory;
-import org.apache.camel.component.netty.codec.DelimiterBasedFrameDecoder;
 
 
 public class IPCDelimiterBasedDecoderFactory extends DefaultChannelHandlerFactory {
     private static final String IPC_PACKET_FRAME_END = "<|><ETX><|>";
-    private static final Integer IPC_PACKET_MAXIMUM_FRAME_SIZE = 64000;
+    private static final Integer IPC_PACKET_MAXIMUM_FRAME_SIZE = 26214400;
 
     @Override
     public ChannelHandler newChannelHandler() {

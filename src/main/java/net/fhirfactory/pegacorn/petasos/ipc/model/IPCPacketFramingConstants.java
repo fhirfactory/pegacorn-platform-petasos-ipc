@@ -25,7 +25,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class IPCPacketFramingConstants {
-    private static final Integer IPC_PACKET_MAXIMUM_FRAME_SIZE = 64000;
+    private static final Integer IPC_PACKET_MAXIMUM_FRAME_SIZE = 26214400;
     private static final String IPC_PACKET_FRAME_END = "<|><ETX><|>";
     private static final String IPC_PACKET_FRAME_START = "<|><STX><|>";
 

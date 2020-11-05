@@ -65,7 +65,8 @@ public class IPCParcelReceiver extends BaseRouteBuilder {
                 .transform(simple("${bodyAs(String)}"))
                 .to(ExchangePattern.InOnly, "direct:testingSystem")
                 .process(new Processor() {
-                             public void process(Exchange exchange) throws Exception {
+                             @Override
+                            public void process(Exchange exchange) throws Exception {
                                  String inputString = (String) exchange.getIn().getBody();
                                  LOG.info("(in the processor) --> {}", framingConstants.getIpcPacketFrameEnd());
                                  String outputString = "Right Back At Ya! -->" + inputString + framingConstants.getIpcPacketFrameEnd() + "\n";
@@ -82,7 +83,7 @@ public class IPCParcelReceiver extends BaseRouteBuilder {
                 + NETTY_TRANSPORT_TYPE + ":"
                 + "//" + getServerHostName() + ":"
                 + getServerHostPort().toString()
-                + "?serverInitializerFactory=#ipcReceiverFactory";
+                + "?serverInitializerFactory=#ipcReceiverFactory&receiveBufferSize=26214400"; // 25mb.  //TODO Mark will centralise buffer size management
         return (nettyFromString);
     }
 
