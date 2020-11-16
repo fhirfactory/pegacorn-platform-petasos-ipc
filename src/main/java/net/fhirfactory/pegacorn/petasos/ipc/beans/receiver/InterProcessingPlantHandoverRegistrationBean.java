@@ -75,7 +75,7 @@ public class InterProcessingPlantHandoverRegistrationBean {
         LOG.trace(".ipcReceiverActivityStart(): Creating new JobCard");
         WUPJobCard activityJobCard = new WUPJobCard(newActivityID, WUPActivityStatusEnum.WUP_ACTIVITY_STATUS_EXECUTING, WUPActivityStatusEnum.WUP_ACTIVITY_STATUS_EXECUTING, topologyProxy.getConcurrencyMode(wupNodeID), topologyProxy.getDeploymentResilienceMode(wupNodeID),  Date.from(Instant.now()));
         LOG.trace(".ipcReceiverActivityStart(): Registering the Work Unit Activity using the activityJobCard --> {} and UoW --> {}", activityJobCard, theUoW);
-        ParcelStatusElement statusElement = servicesBroker.registerSystemEdgeWUA(activityJobCard, theUoW);
+        ParcelStatusElement statusElement = servicesBroker.registerSystemEdgeWorkUnitActivity(activityJobCard, theUoW);
         LOG.trace(".ipcReceiverActivityStart(): Registration aftermath: statusElement --> {}", statusElement);
         // Now we have to Inject some details into the Exchange so that the WUPEgressConduit can extract them as per standard practice
         LOG.trace(".ipcReceiverActivityStart(): Injecting Job Card and Status Element into Exchange for extraction by the WUP Egress Conduit");
