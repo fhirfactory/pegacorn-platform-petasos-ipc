@@ -23,14 +23,15 @@ package net.fhirfactory.pegacorn.petasos.ipc.model;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import net.fhirfactory.pegacorn.petasos.core.moa.wup.GenericMOAWUPTemplate;
+
 @ApplicationScoped
 public class IPCPacketFramingConstants {
-    private static final Integer IPC_PACKET_MAXIMUM_FRAME_SIZE = 64000;
     private static final String IPC_PACKET_FRAME_END = "<|><ETX><|>";
     private static final String IPC_PACKET_FRAME_START = "<|><STX><|>";
 
     public static Integer getIpcPacketMaximumFrameSize() {
-        return IPC_PACKET_MAXIMUM_FRAME_SIZE;
+        return GenericMOAWUPTemplate.IPC_PACKET_MAXIMUM_FRAME_SIZE;
     }
 
     public static String getIpcPacketFrameEnd() {

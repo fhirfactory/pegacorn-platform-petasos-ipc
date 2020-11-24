@@ -34,8 +34,10 @@ import org.apache.camel.component.netty.ServerInitializerFactory;
 import org.apache.camel.component.netty.codec.DelimiterBasedFrameDecoder;
 import org.apache.camel.component.netty.handlers.ServerChannelHandler;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+@ApplicationScoped
 public class IPCPacketDecoderInitializerFactory extends ServerInitializerFactory {
     private NettyConsumer consumer;
 
@@ -52,6 +54,11 @@ public class IPCPacketDecoderInitializerFactory extends ServerInitializerFactory
     protected void initChannel(Channel channel) throws Exception {
         ChannelPipeline ipcReceiverPipeline = channel.pipeline();
 
+        //TODO clean up CDI as this is called directly by netty and explicitly in the code where CDI is not used
+        if (framingConstants == null) {
+            framingConstants = new IPCPacketFramingConstants();
+        }
+        
         // Define Delimeters
         ByteBuf ipcFrameEnd = Unpooled.copiedBuffer(framingConstants.getIpcPacketFrameEnd(),CharsetUtil.UTF_8);
         ByteBuf[] delimiterSet = new ByteBuf[1];

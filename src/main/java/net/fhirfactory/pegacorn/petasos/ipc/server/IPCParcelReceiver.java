@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.fhirfactory.pegacorn.camel.BaseRouteBuilder;
+import net.fhirfactory.pegacorn.petasos.core.moa.wup.GenericMOAWUPTemplate;
 import net.fhirfactory.pegacorn.petasos.ipc.codecs.IPCPacketDecoderInitializerFactory;
 import net.fhirfactory.pegacorn.petasos.ipc.model.IPCPacketFramingConstants;
 
@@ -65,7 +66,8 @@ public class IPCParcelReceiver extends BaseRouteBuilder {
                 .transform(simple("${bodyAs(String)}"))
                 .to(ExchangePattern.InOnly, "direct:testingSystem")
                 .process(new Processor() {
-                             public void process(Exchange exchange) throws Exception {
+                             @Override
+                            public void process(Exchange exchange) throws Exception {
                                  String inputString = (String) exchange.getIn().getBody();
                                  LOG.info("(in the processor) --> {}", framingConstants.getIpcPacketFrameEnd());
                                  String outputString = "Right Back At Ya! -->" + inputString + framingConstants.getIpcPacketFrameEnd() + "\n";
@@ -82,7 +84,7 @@ public class IPCParcelReceiver extends BaseRouteBuilder {
                 + NETTY_TRANSPORT_TYPE + ":"
                 + "//" + getServerHostName() + ":"
                 + getServerHostPort().toString()
-                + "?serverInitializerFactory=#ipcReceiverFactory";
+                + "?serverInitializerFactory=#ipcReceiverFactory&receiveBufferSize=" + GenericMOAWUPTemplate.IPC_PACKET_MAXIMUM_FRAME_SIZE;
         return (nettyFromString);
     }
 
