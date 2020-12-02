@@ -62,7 +62,7 @@ public class IPCParcelReceiver extends BaseRouteBuilder {
 
         fromWithStandardExceptionHandling(ingresFeed())
                 .routeId("TestRoute")
-                .log(LoggingLevel.INFO, "content --> ${body}")
+                .log(LoggingLevel.DEBUG, "content --> ${body}")
                 .transform(simple("${bodyAs(String)}"))
                 .to(ExchangePattern.InOnly, "direct:testingSystem")
                 .process(new Processor() {
@@ -76,7 +76,7 @@ public class IPCParcelReceiver extends BaseRouteBuilder {
                          }
                 );
         fromWithStandardExceptionHandling("direct:testingSystem")
-                .log(LoggingLevel.INFO, "Secondary Feed: content --> ${body}");
+                .log(LoggingLevel.DEBUG, "Secondary Feed: content --> ${body}");
     }
 
     private String ingresFeed() {
